@@ -16,7 +16,11 @@ import flxanimate.animate.*;
 import flxanimate.zip.Zip;
 import openfl.Assets;
 import haxe.io.BytesInput;
+#if (flixel >= "5.3.0")
+import flixel.sound.FlxSound;
+#else
 import flixel.system.FlxSound;
+#end
 import flixel.FlxG;
 import flxanimate.data.AnimationData;
 import flixel.FlxSprite;
@@ -106,6 +110,10 @@ class FlxAnimate extends FlxSprite
 		return showPivot = v;
 	}
 
+	/**
+	 * Loads a regular atlas.
+	 * @param Path The path where the atlas is located. Must be the folder, **NOT** any of the contents of it! 
+	 */
 	public function loadAtlas(Path:String)
 	{
 		if (!Assets.exists('$Path/Animation.json') && haxe.io.Path.extension(Path) != "zip")
@@ -113,9 +121,28 @@ class FlxAnimate extends FlxSprite
 			FlxG.log.error('Animation file not found in specified path: "$path", have you written the correct path?');
 			return;
 		}
-		anim._loadAtlas(atlasSetting(Path));
-		frames = FlxAnimateFrames.fromTextureAtlas(Path);
+		loadSeparateAtlas(atlasSetting(Path), FlxAnimateFrames.fromTextureAtlas(Path));
 	}
+	
+	/**
+	 * Function in handy to load atlases that share same animation/frames but dont necessarily mean it comes together.
+	 * @param animation The animation file. This should be the content of the `JSON`, **NOT** the path of it.
+	 * @param frames The collection of frames.
+	 */
+	public function loadSeparateAtlas(?animation:String = null, ?frames:FlxFramesCollection = null)
+	{
+		if (frames != null)
+			this.frames = frames;
+		if (animation != null)
+		{
+			var json:AnimAtlas = haxe.Json.parse(animation);
+
+			anim._loadAtlas(json);
+		}
+		if (anim != null)
+			origin = anim.curInstance.symbol.transformationPoint;
+	}
+
 	/**
 	 * the function `draw()` renders the symbol that `anim` has currently plus a pivot that you can toggle on or off.
 	 */
@@ -129,6 +156,7 @@ class FlxAnimate extends FlxSprite
 		if (showPivot)
 			drawLimb(_pivot, new FlxMatrix(1,0,0,1, origin.x, origin.y));
 	}
+	
 	/**
 	 * This basically renders an element of any kind, both limbs and symbols.
 	 * It should be considered as the main function that makes rendering a symbol possible.
@@ -415,7 +443,7 @@ class FlxAnimate extends FlxSprite
 		anim.buttonMap.set(button, {Callbacks: callbacks, #if FLX_SOUND_SYSTEM Sound:  sound #end});
 	}
 
-	function setTheSettings(?Settings:Settings):Void
+	public function setTheSettings(?Settings:Settings):Void
 	{
 		@:privateAccess
 		if (true)

@@ -164,16 +164,31 @@ class FlxAnimateFrames extends FlxAtlasFrames
 			FlxG.log.error('the image called "${curJson.meta.image}" does not exist in Path $Path, maybe you changed the image Path somewhere else?');
 	}
 
-	public function concat(frames:FlxFramesCollection)
-	{
-		if (parents.indexOf(frames.parent) == -1)
-			parents.push(frames.parent);
-		for (frame in frames.frames)
-		{
-			this.frames.push(frame);
-			framesHash.set(frame.name, frame);
-		}
-	}
+	#if (flixel >= "5.3.0")
+    public override function concat(collection:FlxFramesCollection, overwriteHash:Bool = false):FlxAtlasFrames
+    {
+        if (parents.indexOf(collection.parent) == -1)
+            parents.push(collection.parent);
+        for (frame in collection.frames)
+        {
+            this.frames.push(frame);
+            framesHash.set(frame.name, frame);
+        }
+        return this;
+    }
+    #else
+    public function concat(frames:FlxFramesCollection)
+    {
+        if (parents.indexOf(frames.parent) == -1)
+            parents.push(frames.parent);
+        for (frame in frames.frames)
+        {
+            this.frames.push(frame);
+            framesHash.set(frame.name, frame);
+        }
+    }
+    #end
+
 	/**
 	 * Sparrow spritesheet format parser with support of both of the versions and making the image completely optional to you.
 	 * @param Path The direction of the Xml you want to parse.
