@@ -150,6 +150,7 @@ class FlxAnim implements IFlxDestroyable
 	{
 		isPlaying = false;
 	}
+
 	public function stop()
 	{
 		pause();

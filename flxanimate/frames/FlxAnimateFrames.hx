@@ -27,7 +27,7 @@ import haxe.xml.Fast as Access;
 #end
 import flixel.graphics.frames.FlxFrame;
 
-class FlxAnimateFrames extends FlxAtlasFrames
+class FlxAnimateFrames extends flixel.graphics.frames.FlxAtlasFrames
 {
 	public function new()
 	{

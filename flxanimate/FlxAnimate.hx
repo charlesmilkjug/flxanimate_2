@@ -72,6 +72,22 @@ class FlxAnimate extends FlxSprite
 	public var shaderEnabled:Bool = false;
 	#end
 
+	public var skew(default, null):FlxPoint = FlxPoint.get();
+
+	static var _skewMatrix:FlxMatrix = new FlxMatrix();
+
+	/**
+	 * Tranformation matrix for this sprite.
+	 * Used only when matrixExposed is set to true
+	 */
+	public var transformMatrix(default, null):Matrix = new Matrix();
+
+	/**
+	 * Bool flag showing whether transformMatrix is used for rendering or not.
+	 * False by default, which means that transformMatrix isn't used for rendering
+	 */
+	public var matrixExposed:Bool = false;
+	
 	public var showPivot(default, set):Bool = false;
 
 	var _pivot:FlxFrame;
@@ -326,22 +342,6 @@ class FlxAnimate extends FlxSprite
 		//	drawDebug();
 		//#end
 	}
-
-	public var skew(default, null):FlxPoint = FlxPoint.get();
-
-	static var _skewMatrix:FlxMatrix = new FlxMatrix();
-
-	/**
-	 * Tranformation matrix for this sprite.
-	 * Used only when matrixExposed is set to true
-	 */
-	public var transformMatrix(default, null):Matrix = new Matrix();
-
-	/**
-	 * Bool flag showing whether transformMatrix is used for rendering or not.
-	 * False by default, which means that transformMatrix isn't used for rendering
-	 */
-	public var matrixExposed:Bool = false;
 
 	function updateSkewMatrix():Void
 	{
