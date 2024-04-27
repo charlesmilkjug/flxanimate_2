@@ -5,6 +5,7 @@ import flixel.math.FlxAngle;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxColor;
 import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxFramesCollection;
 import openfl.geom.Rectangle;
 import openfl.display.BitmapData;
 import flixel.util.FlxDestroyUtil;
@@ -87,7 +88,7 @@ class FlxAnimate extends FlxSprite
 	 * False by default, which means that transformMatrix isn't used for rendering
 	 */
 	public var matrixExposed:Bool = false;
-	
+
 	public var showPivot(default, set):Bool = false;
 
 	var _pivot:FlxFrame;
